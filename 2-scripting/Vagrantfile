@@ -1,0 +1,48 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/bionic64"
+
+  config.vm.define "db" do |db|
+    db.vm.network "private_network", ip: "172.28.128.20"
+    db.vm.provision "shell" do |s|
+      s.path = "db-bootstrap.sh"
+      s.args = [
+        "change_db_pass", # mysql_root_password
+        "movie", # mysql_app_user
+        "change_db_pass", # mysql_app_password
+        "movie_db", # mysql_app_db_name
+      ]
+    end
+  end
+
+  config.vm.define "api" do |api|
+    api.vm.network "private_network", ip: "172.28.128.21"
+    api.vm.provision "shell" do |s|
+      s.path = "api-bootstrap.sh"
+      s.args = [
+        "https://github.com/jodapomo/movie-analyst-api", # repository_url
+        "movie-analyst-api", # repo_name
+        "3000", # api_port
+        "172.28.128.20", # mysql_host
+        "3306", # mysql_port
+        "movie", # mysql_user
+        "change_db_pass", # mysql_password
+        "movie_db", # mysql_db_name
+        "vagrant", # user
+      ]
+    end
+  end
+
+  config.vm.define "front" do |front|
+    front.vm.network "private_network", ip: "172.28.128.22"
+    front.vm.provision "shell" do |s|
+      s.path = "front-bootstrap.sh"
+      s.args = [
+        "https://github.com/jodapomo/movie-analyst-ui", # repository_url
+        "movie-analyst-ui", # repo_name
+        "8080", # app_port
+        "http://172.28.128.21:3000", # api_url
+        "vagrant", # user
+      ]
+    end
+  end
+end
