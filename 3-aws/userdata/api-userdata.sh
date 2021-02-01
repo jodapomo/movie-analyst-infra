@@ -69,7 +69,7 @@ start_app() {
 
 set_startup() {
   exec_as_user "source $nvm_path
-  startup=$(pm2 startup)
+  startup=\$(pm2 startup)
   regex=\"sudo (.*)\"
   echo \"STARTUP SCRIPT: \$startup\"
   if [[ \$startup =~ \$regex ]]
