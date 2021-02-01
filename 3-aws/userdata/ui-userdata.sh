@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 repository_url=$1
 repo_name=$2

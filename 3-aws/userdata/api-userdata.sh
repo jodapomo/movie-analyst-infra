@@ -1,8 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 user_home="/home/$user"
 command="$user_home/.command.sh"
 nvm_path="$user_home/.nvm/nvm.sh"
+
+cd $user_home
 
 exec_as_user() {
   echo "$1" >$command
