@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-repository_url=$1
-repo_name=$2
-api_port=$3
-mysql_host=$4
-mysql_port=$5
-mysql_user=$6
-mysql_password=$7
-mysql_db_name=$8
-user=$9
-
 user_home="/home/$user"
 command="$user_home/.command.sh"
 nvm_path="$user_home/.nvm/nvm.sh"
