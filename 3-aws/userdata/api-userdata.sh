@@ -73,7 +73,7 @@ set_startup() {
   echo '====> COMM: \$comm'
   if [[ \$comm =~ \"sudo (.*)\" ]]
   then
-    sudo bash -c \"${BASH_REMATCH[1]}\"
+    sudo bash -c \"\${BASH_REMATCH[1]}\"
   fi
   pm2 save
   sudo chown $user:$user /home/$user/.pm2/rpc.sock /home/$user/.pm2/pub.sock"
