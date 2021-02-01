@@ -69,9 +69,10 @@ start_app() {
 
 set_startup() {
   exec_as_user "source $nvm_path
-  comm=$(pm2 startup)
-  echo '====> COMM: \$comm'
-  if [[ \$comm =~ \"sudo (.*)\" ]]
+  startup=$(pm2 startup)
+  regex=\"sudo (.*)\"
+  echo \"STARTUP SCRIPT: \$startup\"
+  if [[ \$startup =~ \$regex ]]
   then
     sudo bash -c \"\${BASH_REMATCH[1]}\"
   fi
