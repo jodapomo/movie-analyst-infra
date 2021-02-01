@@ -68,14 +68,13 @@ start_app() {
 }
 
 set_startup() {
-  # comm=$(su $user bash -c "pm2 startup")
-  # if [[ $comm =~ "sudo (.*)" ]]
-  # then
-  #   sudo bash -c "${BASH_REMATCH[1]}"
-  # fi
-
   exec_as_user "source $nvm_path
-  pm2 startup
+  comm=$(pm2 startup)
+  echo '====> COMM: \$comm'
+  if [[ \$comm =~ \"sudo (.*)\" ]]
+  then
+    sudo bash -c \"${BASH_REMATCH[1]}\"
+  fi
   pm2 save
   sudo chown $user:$user /home/$user/.pm2/rpc.sock /home/$user/.pm2/pub.sock"
 }
