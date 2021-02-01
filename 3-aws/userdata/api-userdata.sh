@@ -40,14 +40,13 @@ install_nvm() {
 install_app_requirements() {
   cd $user_home/$repo_name
   node_version=$(cat .node-version)
-  message "NodeJs $node_version"
 
   nvm install $node_version
   node -v
 
   npm install
 
-  npm install pm2 -g
+  npm install -g pm2
 }
 
 app_pre_setup() {
@@ -69,9 +68,14 @@ start_app() {
 }
 
 set_startup() {
+  comm=$(su $user bash -c "pm2 startup")
+  if [[ $comm =~ "sudo (.*)" ]]
+  then
+    sudo bash -c "${BASH_REMATCH[1]}"
+  fi
+
   exec_as_user "source $nvm_path
   pm2 save
-  sudo pm2 startup
   sudo chown $user:$user /home/$user/.pm2/rpc.sock /home/$user/.pm2/pub.sock"
 }
 
