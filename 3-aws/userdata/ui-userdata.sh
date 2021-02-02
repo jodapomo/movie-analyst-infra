@@ -1,14 +1,10 @@
 #!/bin/bash
 
-repository_url=$1
-repo_name=$2
-app_port=$3
-api_url=$4
-user=$5
-
 user_home="/home/$user"
 command="$user_home/.command.sh"
 nvm_path="$user_home/.nvm/nvm.sh"
+
+cd $user_home
 
 exec_as_user() {
   echo "$1" >$command
@@ -44,7 +40,6 @@ install_nvm() {
 install_app_requirements() {
   cd $user_home/$repo_name
   node_version=$(cat .node-version)
-  message "NodeJs $node_version"
 
   nvm install $node_version
   node -v
@@ -68,8 +63,14 @@ start_app() {
 
 set_startup() {
   exec_as_user "source $nvm_path
+  startup=\$(pm2 startup)
+  regex=\"sudo (.*)\"
+  echo \"STARTUP SCRIPT: \$startup\"
+  if [[ \$startup =~ \$regex ]]
+  then
+    sudo bash -c \"\${BASH_REMATCH[1]}\"
+  fi
   pm2 save
-  sudo pm2 startup
   sudo chown $user:$user /home/$user/.pm2/rpc.sock /home/$user/.pm2/pub.sock"
 }
 
