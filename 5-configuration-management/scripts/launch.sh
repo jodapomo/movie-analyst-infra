@@ -32,9 +32,9 @@ function install_docker_compose(){
 
 function install_ansible() {
     apt update
-    apt install software-properties-common
+    apt install software-properties-common -y
     apt-add-repository --yes --update ppa:ansible/ansible
-    apt install ansible
+    apt install ansible -y
 }
 
 function compose() {

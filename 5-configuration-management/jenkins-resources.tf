@@ -6,15 +6,19 @@ resource "aws_instance" "tf-jp-ramp-up-jenkins" {
   subnet_id                   = var.subnet_id_public_0
   vpc_security_group_ids      = [aws_security_group.tf-jp-ramp-up-jenkins-sg.id]
 
-  user_data = base64encode(data.template_file.userdata-jenkins.rendered)
+  user_data_base64 = base64encode(data.template_file.userdata-jenkins.rendered)
 
   tags = {
     Name        = "tf-jp-ramp-up-jenkins"
     project     = var.project_tag
     responsible = var.responsible_tag
   }
-}
 
+  volume_tags = {
+    project     = var.project_tag
+    responsible = var.responsible_tag
+  }
+}
 resource "aws_security_group" "tf-jp-ramp-up-jenkins-sg" {
   name        = "tf-jp-ramp-up-jenkins-sg"
   description = "Jenkins launch template instances"
